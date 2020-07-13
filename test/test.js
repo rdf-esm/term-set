@@ -1,26 +1,29 @@
-/* global describe, expect, it */
+/* global describe, it */
 
-const rdf = require('@rdfjs/data-model')
-const { termToNTriples } = require('@rdfjs/to-ntriples')
-const TermSet = require('..')
+import chai from 'chai'
+import * as rdf from '@rdf-esm/data-model'
+import { termToNTriples } from '@rdf-esm/to-ntriples'
+import TermSet from '../index.js'
 
-describe('@rdfjs/term-set', () => {
+const { expect } = chai
+
+describe('@rdf-esm/term-set', () => {
   it('should be a constructor', () => {
-    expect(typeof TermSet).toBe('function')
+    expect(typeof TermSet).to.eq('function')
   })
 
   describe('.size', () => {
     it('should be a number property', () => {
       const termset = new TermSet()
 
-      expect(typeof termset.size).toBe('number')
+      expect(typeof termset.size).to.eq('number')
     })
 
     it('should return the size of the index', () => {
       const term = rdf.namedNode('http://example.org/')
       const termset = new TermSet([term])
 
-      expect(termset.size).toBe(1)
+      expect(termset.size).to.eq(1)
     })
   })
 
@@ -28,7 +31,7 @@ describe('@rdfjs/term-set', () => {
     it('should be a method', () => {
       const termset = new TermSet()
 
-      expect(typeof termset.add).toBe('function')
+      expect(typeof termset.add).to.eq('function')
     })
 
     it('should add the given term to the index', () => {
@@ -37,8 +40,8 @@ describe('@rdfjs/term-set', () => {
 
       termset.add(term)
 
-      expect([...termset.index.values()][0]).toBe(term)
-      expect([...termset.index.keys()][0]).toBe(termToNTriples(term))
+      expect([...termset.index.values()][0]).to.eq(term)
+      expect([...termset.index.keys()][0]).to.eq(termToNTriples(term))
     })
 
     it('should keep the term if another one with the same N-Triple representation is added', () => {
@@ -49,8 +52,8 @@ describe('@rdfjs/term-set', () => {
       termset.add(term0)
       termset.add(term1)
 
-      expect(termset.index.size).toBe(1)
-      expect(term0.equals([...termset.index.values()][0])).toBe(true)
+      expect(termset.index.size).to.eq(1)
+      expect(term0.equals([...termset.index.values()][0])).to.eq(true)
     })
 
     it('should return the Termset itself', () => {
@@ -59,7 +62,7 @@ describe('@rdfjs/term-set', () => {
 
       termset.add(term)
 
-      expect(termset.add(term)).toBe(termset)
+      expect(termset.add(term)).to.eq(termset)
     })
   })
 
@@ -67,7 +70,7 @@ describe('@rdfjs/term-set', () => {
     it('should be a method', () => {
       const termset = new TermSet()
 
-      expect(typeof termset.clear).toBe('function')
+      expect(typeof termset.clear).to.eq('function')
     })
 
     it('should clear the index', () => {
@@ -76,7 +79,7 @@ describe('@rdfjs/term-set', () => {
 
       termset.clear()
 
-      expect(termset.index.size).toBe(0)
+      expect(termset.index.size).to.eq(0)
     })
   })
 
@@ -84,7 +87,7 @@ describe('@rdfjs/term-set', () => {
     it('should be a method', () => {
       const termset = new TermSet()
 
-      expect(typeof termset.delete).toBe('function')
+      expect(typeof termset.delete).to.eq('function')
     })
 
     it('should delete the given term', () => {
@@ -94,22 +97,22 @@ describe('@rdfjs/term-set', () => {
 
       termset.delete(term1)
 
-      expect(termset.index.size).toBe(1)
-      expect(term0.equals([...termset.index.values()][0])).toBe(true)
+      expect(termset.index.size).to.eq(1)
+      expect(term0.equals([...termset.index.values()][0])).to.eq(true)
     })
 
     it('should return true if the given term was deleted', () => {
       const term = rdf.namedNode('http://example.org/')
       const termset = new TermSet([term])
 
-      expect(termset.delete(term)).toBe(true)
+      expect(termset.delete(term)).to.eq(true)
     })
 
     it('should return false if the given term was not deleted', () => {
       const term = rdf.namedNode('http://example.org/')
       const termset = new TermSet()
 
-      expect(termset.delete(term)).toBe(false)
+      expect(termset.delete(term)).to.eq(false)
     })
   })
 
@@ -117,7 +120,7 @@ describe('@rdfjs/term-set', () => {
     it('should be a method', () => {
       const termset = new TermSet()
 
-      expect(typeof termset.entries).toBe('function')
+      expect(typeof termset.entries).to.eq('function')
     })
 
     it('should return an iterator that contains an array element [term, term] for each term', () => {
@@ -127,11 +130,11 @@ describe('@rdfjs/term-set', () => {
 
       const entries = [...termset.entries()]
 
-      expect(entries.length).toBe(2)
-      expect(term0.equals(entries[0][0])).toBe(true)
-      expect(term0.equals(entries[0][1])).toBe(true)
-      expect(term1.equals(entries[1][0])).toBe(true)
-      expect(term1.equals(entries[1][1])).toBe(true)
+      expect(entries.length).to.eq(2)
+      expect(term0.equals(entries[0][0])).to.eq(true)
+      expect(term0.equals(entries[0][1])).to.eq(true)
+      expect(term1.equals(entries[1][0])).to.eq(true)
+      expect(term1.equals(entries[1][1])).to.eq(true)
     })
   })
 
@@ -139,7 +142,7 @@ describe('@rdfjs/term-set', () => {
     it('should be a method', () => {
       const termset = new TermSet()
 
-      expect(typeof termset.forEach).toBe('function')
+      expect(typeof termset.forEach).to.eq('function')
     })
 
     it('should loop over all terms in insertion order', () => {
@@ -152,9 +155,9 @@ describe('@rdfjs/term-set', () => {
         terms.push(term)
       })
 
-      expect(terms.length).toBe(2)
-      expect(term0.equals(terms[0])).toBe(true)
-      expect(term1.equals(terms[1])).toBe(true)
+      expect(terms.length).to.eq(2)
+      expect(term0.equals(terms[0])).to.eq(true)
+      expect(term1.equals(terms[1])).to.eq(true)
     })
   })
 
@@ -162,7 +165,7 @@ describe('@rdfjs/term-set', () => {
     it('should be a method', () => {
       const termset = new TermSet()
 
-      expect(typeof termset.has).toBe('function')
+      expect(typeof termset.has).to.eq('function')
     })
 
     it('should return true if the Termset contains the given term', () => {
@@ -170,7 +173,7 @@ describe('@rdfjs/term-set', () => {
       const term1 = rdf.namedNode('http://example.org/1')
       const termset = new TermSet([term0, term1])
 
-      expect(termset.has(term1)).toBe(true)
+      expect(termset.has(term1)).to.eq(true)
     })
 
     it('should return false if the Termset does not contain the given term', () => {
@@ -178,7 +181,7 @@ describe('@rdfjs/term-set', () => {
       const term1 = rdf.namedNode('http://example.org/1')
       const termset = new TermSet([term0])
 
-      expect(termset.has(term1)).toBe(false)
+      expect(termset.has(term1)).to.eq(false)
     })
   })
 
@@ -186,7 +189,7 @@ describe('@rdfjs/term-set', () => {
     it('should be a method', () => {
       const termset = new TermSet()
 
-      expect(typeof termset.values).toBe('function')
+      expect(typeof termset.values).to.eq('function')
     })
 
     it('should return an iterator that contains all terms', () => {
@@ -196,9 +199,9 @@ describe('@rdfjs/term-set', () => {
 
       const values = [...termset.values()]
 
-      expect(values.length).toBe(2)
-      expect(term0.equals(values[0])).toBe(true)
-      expect(term1.equals(values[1])).toBe(true)
+      expect(values.length).to.eq(2)
+      expect(term0.equals(values[0])).to.eq(true)
+      expect(term1.equals(values[1])).to.eq(true)
     })
   })
 
@@ -206,7 +209,7 @@ describe('@rdfjs/term-set', () => {
     it('should be a method', () => {
       const termset = new TermSet()
 
-      expect(typeof termset.keys).toBe('function')
+      expect(typeof termset.keys).to.eq('function')
     })
 
     it('should return an iterator that contains all terms', () => {
@@ -216,9 +219,9 @@ describe('@rdfjs/term-set', () => {
 
       const values = [...termset.keys()]
 
-      expect(values.length).toBe(2)
-      expect(term0.equals(values[0])).toBe(true)
-      expect(term1.equals(values[1])).toBe(true)
+      expect(values.length).to.eq(2)
+      expect(term0.equals(values[0])).to.eq(true)
+      expect(term1.equals(values[1])).to.eq(true)
     })
   })
 
@@ -226,7 +229,7 @@ describe('@rdfjs/term-set', () => {
     it('should be a method', () => {
       const termset = new TermSet()
 
-      expect(typeof termset[Symbol.iterator]).toBe('function')
+      expect(typeof termset[Symbol.iterator]).to.eq('function')
     })
 
     it('should return an iterator that contains all terms', () => {
@@ -236,9 +239,9 @@ describe('@rdfjs/term-set', () => {
 
       const terms = [...termset]
 
-      expect(terms.length).toBe(2)
-      expect(term0.equals(terms[0])).toBe(true)
-      expect(term1.equals(terms[1])).toBe(true)
+      expect(terms.length).to.eq(2)
+      expect(term0.equals(terms[0])).to.eq(true)
+      expect(term1.equals(terms[1])).to.eq(true)
     })
   })
 })

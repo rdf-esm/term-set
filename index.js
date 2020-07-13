@@ -1,6 +1,6 @@
-const { termToNTriples } = require('@rdfjs/to-ntriples')
+import { termToNTriples } from '@rdf-esm/to-ntriples'
 
-class TermSet {
+export default class TermSet {
   constructor (terms) {
     this.index = new Map()
 
@@ -59,5 +59,3 @@ class TermSet {
     return this.values()[Symbol.iterator]()
   }
 }
-
-module.exports = TermSet
